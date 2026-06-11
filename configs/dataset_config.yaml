@@ -1,0 +1,40 @@
+dataset_root: dataset
+fps: 1
+
+objects:
+  onion:
+    states: [whole, peeled, halved, sliced, diced, cooked]
+  carrot:
+    states: [whole, peeled, sliced, diced, cooked]
+  egg:
+    states: [whole, cracked, beaten, cooked]
+
+models:
+  detector: grounding_dino
+  tracker: sam2
+  vlm_teacher: clip
+  feature_extractor: dinov2
+
+sequence:
+  length: 16
+  stride: 4
+
+quality:
+  min_detection_confidence: 0.35
+  min_mask_area: 100
+  min_clip_top_score: 0.20
+  min_clip_margin: 0.05
+
+split:
+  train: 0.8
+  val: 0.1
+  test: 0.1
+  seed: 42
+
+# Optional. If omitted, videos are loaded from dataset/metadata/video_metadata.json
+# videos:
+#   - video_id: onion_001
+#     video_path: raw_videos/onion_001.mp4
+#     title: How to dice an onion
+#     object: onion
+#     task: dice onion

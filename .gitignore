@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+bin
+
+# Generated dataset artifacts
+dataset/frames/
+dataset/detections/
+dataset/masks/
+dataset/masked_crops/
+dataset/clip_scores/
+dataset/pseudo_labels/
+dataset/features/
+dataset/sequences/
+dataset/frame_dataset.jsonl
+dataset/temporal_dataset.jsonl
+splits/*.jsonl
