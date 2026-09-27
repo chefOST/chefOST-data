@@ -203,21 +203,18 @@ def consensus(proposals, count, min_confidence=0.80, min_agreement=2 / 3):
     return timeline
 
 
-def enforce_consistency(timeline, transitions, minimum_run=2):
+def enforce_consistency(timeline, transitions):
     physical = set(transitions)
     result = [dict(item) for item in timeline]
 
-    index = 0
-    while index < len(result):
-        state = result[index]["state"]
-        end = index + 1
-        while end < len(result) and result[end]["state"] == state:
-            end += 1
-        if state in physical and end - index < minimum_run:
-            for item in result[index:end]:
-                item["state"] = "uncertain"
-                item["evidence"] = "rejected one-frame physical-state flicker"
-        index = end
+    # Reject only an actual A-B-A flicker. Uncertain/occluded frames must not
+    # erase a real transition that is visible at only one sampled second.
+    original = [item["state"] for item in timeline]
+    for index in range(1, len(result) - 1):
+        state = original[index]
+        if state in physical and original[index - 1] in physical and original[index - 1] == original[index + 1] != state:
+            result[index]["state"] = "uncertain"
+            result[index]["evidence"] = "rejected one-frame A-B-A physical-state flicker"
 
     previous = None
     for item in result:
