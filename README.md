@@ -8,24 +8,19 @@ Conservative 1 FPS labeling of one visible cooking-state change. Frames are clas
 
 The object is suitable because its surface visibly progresses from pale to browned. The manifest explicitly excludes the other dough disc and finished chapatis in view.
 
-## Run through Modal
+## Run
 
-Python 3.10+ and `ffmpeg` are required. Store the OpenAI key in Modal so it is never injected into the local labeling process:
+Python 3.10+ and `ffmpeg` are required. This repository has no Python package dependencies.
 
 ```bash
-python3 -m pip install -r requirements.txt
-modal setup
-modal secret create openai-secret OPENAI_API_KEY=sk-...
-modal deploy modal_app.py
-
-# Override this when a stronger vision-capable model is available to your account.
+export OPENAI_API_KEY=...
+# Override this if a stronger vision-capable model is available to your account.
 export OPENAI_VLM_MODEL=gpt-5.2
-python3 pipeline.py label --modal --manifest selected_video.json --output output
+
+python3 pipeline.py label --manifest selected_video.json --output output
 ```
 
-Frame extraction stays local. Only the image windows, prompts, and schemas cross Modal's private RPC boundary. The deployed function reads `OPENAI_API_KEY` from the Modal secret and calls OpenAI; the key never returns locally.
-
-To bypass Modal, omit `--modal` and set `OPENAI_API_KEY` locally. The script uses `/Applications/AnyTrans.app/Contents/Resources/ffmpeg` as a local fallback when `ffmpeg` is not on `PATH`.
+The script uses `/Applications/AnyTrans.app/Contents/Resources/ffmpeg` as a local fallback when `ffmpeg` is not on `PATH`.
 
 Outputs:
 
