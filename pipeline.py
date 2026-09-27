@@ -152,7 +152,7 @@ def label_schema(labels):
     }
 
 
-def label_frames(manifest, frames, output, model, api_key):
+def label_frames(manifest, frames, output, model, request_json):
     labels = [s["name"] for s in manifest["states"]] + sorted(SPECIAL_STATES)
     cache = output / "raw_batches"
     cache.mkdir(exist_ok=True)
@@ -166,7 +166,7 @@ def label_frames(manifest, frames, output, model, api_key):
             content = [{"type": "input_text", "text": state_prompt(manifest, indices)}]
             for index in indices:
                 content += [{"type": "input_text", "text": f"Sample {index}, timestamp {index}s:"}, image_part(frames[index])]
-            result = openai_json(model, content, label_schema(labels), api_key)
+            result = request_json(model, content, label_schema(labels))
             cache_file.write_text(json.dumps(result, indent=2) + "\n")
         expected = set(range(start, end))
         returned = [item.get("sample_index") for item in result.get("frames", [])]
@@ -268,7 +268,7 @@ def verify_schema():
     }
 
 
-def verify_changes(changes, manifest, frames, model, api_key):
+def verify_changes(changes, manifest, frames, model, request_json):
     verified = []
     for change in changes:
         boundary = change["frame"]
@@ -281,7 +281,7 @@ The attached samples are {indices}. Use only visible evidence."""
         content = [{"type": "input_text", "text": prompt}]
         for index in indices:
             content += [{"type": "input_text", "text": f"Sample {index}:"}, image_part(frames[index])]
-        check = openai_json(model, content, verify_schema(), api_key)
+        check = request_json(model, content, verify_schema())
         accepted = check["verified"] and check["identity_match"] and check["confidence"] >= 0.90 and check["first_new_state_sample"] == boundary
         verified.append({**change, "vlm_verified": accepted, "verification_confidence": check["confidence"], "verification_evidence": check["evidence"]})
     return verified
@@ -313,20 +313,33 @@ def finalize(review_path, destination):
     return len(accepted)
 
 
+def make_requester(use_modal=False):
+    if use_modal:
+        try:
+            import modal
+        except ImportError as error:
+            raise RuntimeError("install Modal with: python3 -m pip install modal") from error
+        remote = modal.Function.from_name("ego4d-labeler", "openai_json")
+        return remote.remote
+
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        raise RuntimeError("set OPENAI_API_KEY or use --modal")
+    return lambda model, content, schema: openai_json(model, content, schema, api_key)
+
+
 def run(args):
     manifest_path = args.manifest.resolve()
     manifest = load_manifest(manifest_path)
     if not manifest["video"].is_file():
         raise RuntimeError(f"video not found: {manifest['video']}")
-    api_key = os.environ.get("OPENAI_API_KEY")
-    if not api_key:
-        raise RuntimeError("set OPENAI_API_KEY")
+    request_json = make_requester(args.modal)
     args.output.mkdir(parents=True, exist_ok=True)
     frames = extract_frames(manifest, args.output, ffmpeg_path(args.ffmpeg))
-    proposals = label_frames(manifest, frames, args.output, args.model, api_key)
+    proposals = label_frames(manifest, frames, args.output, args.model, request_json)
     raw = consensus(proposals, len(frames))
     timeline = enforce_consistency(raw, manifest["transitions"])
-    changes = verify_changes(find_changes(timeline, manifest["transitions"]), manifest, frames, args.model, api_key)
+    changes = verify_changes(find_changes(timeline, manifest["transitions"]), manifest, frames, args.model, request_json)
     write_jsonl(args.output / "timeline.jsonl", timeline)
     write_review(args.output / "changes_for_review.csv", changes)
     print(f"Wrote {len(timeline)} frame labels and {len(changes)} proposed changes to {args.output}")
@@ -341,6 +354,7 @@ def main():
     label.add_argument("--output", type=Path, default=Path("output"))
     label.add_argument("--model", default=os.environ.get("OPENAI_VLM_MODEL", "gpt-5.2"))
     label.add_argument("--ffmpeg")
+    label.add_argument("--modal", action="store_true", help="use the private deployed Modal function instead of a local API key")
     finalize_parser = subparsers.add_parser("finalize")
     finalize_parser.add_argument("--review", type=Path, default=Path("output/changes_for_review.csv"))
     finalize_parser.add_argument("--output", type=Path, default=Path("output/state_changes.jsonl"))
