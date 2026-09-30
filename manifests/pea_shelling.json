@@ -1,0 +1,32 @@
+{
+  "video_id": "442d63e5-36a6-49db-a995-a598f2518e54",
+  "start_second": 0,
+  "duration_seconds": 75,
+  "selection_reason": "One batch of green pea pods remains in view while peas are visibly removed into the metal plate.",
+  "object": "the batch of green pea pods being opened over the metal plate together with the peas removed directly from those pods",
+  "states": [
+    {
+      "name": "mostly_in_pods",
+      "description": "most of the tracked peas remain inside intact or unopened pods"
+    },
+    {
+      "name": "mixed",
+      "description": "both unopened pods and a substantial quantity of removed peas are visible"
+    },
+    {
+      "name": "mostly_shelled",
+      "description": "most tracked peas are loose in the plate and few unopened pods remain"
+    }
+  ],
+  "transitions": {
+    "mostly_in_pods": [
+      "mixed",
+      "mostly_shelled"
+    ],
+    "mixed": [
+      "mostly_shelled"
+    ],
+    "mostly_shelled": []
+  },
+  "video": "../../ego4d_data/v2/clips/442d63e5-36a6-49db-a995-a598f2518e54.mp4"
+}

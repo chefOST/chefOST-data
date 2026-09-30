@@ -1,0 +1,32 @@
+{
+  "video_id": "be25feac-21e4-4e56-93e7-9697ebe9636a",
+  "start_second": 407,
+  "duration_seconds": 45,
+  "selection_reason": "The same orange batch remains on the counter while whole oranges are visibly cut into halves.",
+  "object": "the group of whole oranges beside the wooden cutting board and every orange half cut directly from that group",
+  "states": [
+    {
+      "name": "whole",
+      "description": "the tracked batch is predominantly whole uncut oranges"
+    },
+    {
+      "name": "partially_halved",
+      "description": "both whole tracked oranges and newly cut halves are visible"
+    },
+    {
+      "name": "halved",
+      "description": "the tracked batch is predominantly separated orange halves"
+    }
+  ],
+  "transitions": {
+    "whole": [
+      "partially_halved",
+      "halved"
+    ],
+    "partially_halved": [
+      "halved"
+    ],
+    "halved": []
+  },
+  "video": "../../ego4d_data/v2/clips/be25feac-21e4-4e56-93e7-9697ebe9636a.mp4"
+}
