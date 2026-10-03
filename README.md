@@ -19,5 +19,3 @@ git clone https://github.com/chefOST/chefOST-data.git
 ```
 
 Already cloned? Run `git lfs pull` inside the repository.
-
-Raf’s original dataset-generation code and history are preserved on [`raf/dataset-generation`](https://github.com/chefOST/chefOST-data/tree/raf/dataset-generation).
