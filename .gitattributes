@@ -1,0 +1,2 @@
+MOSCATO/annotations/**/*.json filter=lfs diff=lfs merge=lfs -text
+MOSCATO/annotations/**/*.xlsx filter=lfs diff=lfs merge=lfs -text
