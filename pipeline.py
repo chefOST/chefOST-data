@@ -310,6 +310,27 @@ def finalize(review_path, destination):
     return len(accepted)
 
 
+def keyframes(timeline):
+    result, previous = [], None
+    for row in timeline:
+        state = row["state"]
+        if state in SPECIAL_STATES or state == previous:
+            continue
+        result.append({"frame": row["sample_index"], "state": state})
+        previous = state
+    return result
+
+
+def write_keyframes(timeline_path, destination):
+    timeline = [json.loads(line) for line in timeline_path.read_text().splitlines() if line]
+    rows = keyframes(timeline)
+    with destination.open("w", newline="") as file:
+        writer = csv.DictWriter(file, ["frame", "state"])
+        writer.writeheader()
+        writer.writerows(rows)
+    return len(rows)
+
+
 def make_requester(use_modal=False):
     if use_modal:
         try:
@@ -355,12 +376,18 @@ def main():
     finalize_parser = subparsers.add_parser("finalize")
     finalize_parser.add_argument("--review", type=Path, default=Path("output/changes_for_review.csv"))
     finalize_parser.add_argument("--output", type=Path, default=Path("output/state_changes.jsonl"))
+    keyframes_parser = subparsers.add_parser("keyframes")
+    keyframes_parser.add_argument("--timeline", type=Path, required=True)
+    keyframes_parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.command == "label":
         run(args)
-    else:
+    elif args.command == "finalize":
         count = finalize(args.review, args.output)
         print(f"Wrote {count} approved state changes to {args.output}")
+    else:
+        count = write_keyframes(args.timeline, args.output)
+        print(f"Wrote {count} frame-state keyframes to {args.output}")
 
 
 if __name__ == "__main__":
