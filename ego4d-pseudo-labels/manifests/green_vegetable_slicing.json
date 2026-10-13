@@ -1,6 +1,6 @@
 {
   "video_id": "f281dde6-b964-4bc2-90a2-49ca2830e05d",
-  "video": "../../ego4d_data/v2/clips/f281dde6-b964-4bc2-90a2-49ca2830e05d.mp4",
+  "video": "../../../ego4d_data/v2/clips/f281dde6-b964-4bc2-90a2-49ca2830e05d.mp4",
   "start_second": 345,
   "duration_seconds": 14,
   "selection_reason": "One long green vegetable remains on the white cutting board while it is visibly sliced.",
