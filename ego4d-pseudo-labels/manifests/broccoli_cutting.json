@@ -1,0 +1,32 @@
+{
+  "video_id": "be4c4301-4b98-499f-8c98-dfe41f72df02",
+  "start_second": 430,
+  "duration_seconds": 32,
+  "selection_reason": "One broccoli crown remains on the green board while visibly separating into florets.",
+  "object": "the single broccoli crown placed on the green cutting board and all florets cut directly from that crown",
+  "states": [
+    {
+      "name": "whole_crown",
+      "description": "the crown remains one connected piece"
+    },
+    {
+      "name": "partially_separated",
+      "description": "the crown still has a connected remainder and at least one detached floret"
+    },
+    {
+      "name": "separated_florets",
+      "description": "the tracked crown has been reduced predominantly to detached florets"
+    }
+  ],
+  "transitions": {
+    "whole_crown": [
+      "partially_separated",
+      "separated_florets"
+    ],
+    "partially_separated": [
+      "separated_florets"
+    ],
+    "separated_florets": []
+  },
+  "video": "../../ego4d_data/v2/clips/be4c4301-4b98-499f-8c98-dfe41f72df02.mp4"
+}
