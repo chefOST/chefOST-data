@@ -10,6 +10,8 @@ The object is suitable because its surface visibly progresses from pale to brown
 
 ## Run through Modal
 
+Run the commands below from `Ego4D/ego4d-pseudo-labels/`.
+
 Python 3.10+ and `ffmpeg` are required. Store the OpenAI key in Modal so it is never injected into the local labeling process:
 
 ```bash
@@ -43,6 +45,8 @@ python3 pipeline.py finalize
 ```
 
 This writes `output/state_changes.jsonl`, containing only human-approved frame-to-object-state-change pairs. A transition frame means the first 1 FPS sample where the new state is visibly established, not the unknowable exact instant between samples.
+
+Copy final annotation files to [`Ego4D/annotations/pseudo_labels/`](../annotations/pseudo_labels/) and dictionaries/video metadata to [`Ego4D/vocabulary/`](../vocabulary/). Keep frames, caches and review work in ignored `output/`.
 
 ## Checks
 
