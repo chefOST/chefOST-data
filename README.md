@@ -17,7 +17,7 @@ Multiple states can apply to one object at a time; verify video/frame alignment 
 - `Ego4D/annotations/pseudo_labels/`: final pseudo-labels for selected videos.
 - `Ego4D/vocabulary/`: object/state dictionaries and video metadata.
 
-These folders are empty placeholders. See the [generation pipeline](ego4d-pseudo-labels/README.md) for code and input manifests. Include video/object IDs, source timestamps and generation metadata with shared labels. Keep pseudo-labels separate from evaluation ground truth.
+These folders are empty placeholders. See the [generation pipeline](Ego4D/ego4d-pseudo-labels/README.md) for code and input manifests. Include video/object IDs, source timestamps and generation metadata with shared labels. Keep pseudo-labels separate from evaluation ground truth.
 
 ## Download
 
