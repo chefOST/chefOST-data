@@ -1,0 +1,32 @@
+{
+  "video_id": "add7886f-9ebf-4819-a800-5901bcd20002",
+  "start_second": 88,
+  "duration_seconds": 40,
+  "selection_reason": "One pale gourd segment is held continuously and visibly reduced into pieces over a bowl.",
+  "object": "the pale green gourd segment held in the left hand and all pieces cut directly from that exact segment into the metal bowl",
+  "states": [
+    {
+      "name": "intact_segment",
+      "description": "the tracked segment has not yet been cut into multiple pieces"
+    },
+    {
+      "name": "partially_chopped",
+      "description": "part of the tracked segment remains in hand while some descendant pieces are in the bowl"
+    },
+    {
+      "name": "chopped_pieces",
+      "description": "the tracked segment has been completely reduced to separate pieces"
+    }
+  ],
+  "transitions": {
+    "intact_segment": [
+      "partially_chopped",
+      "chopped_pieces"
+    ],
+    "partially_chopped": [
+      "chopped_pieces"
+    ],
+    "chopped_pieces": []
+  },
+  "video": "../../../ego4d_data/v2/clips/add7886f-9ebf-4819-a800-5901bcd20002.mp4"
+}

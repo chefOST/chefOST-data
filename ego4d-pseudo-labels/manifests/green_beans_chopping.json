@@ -1,0 +1,32 @@
+{
+  "video_id": "4f05d509-da94-4415-8566-33bdd8220912",
+  "start_second": 0,
+  "duration_seconds": 63,
+  "selection_reason": "The same bundle of long green beans remains visible as it is chopped into short pieces.",
+  "object": "the bundle of long green beans on the cutting board and all pieces cut directly from that bundle",
+  "states": [
+    {
+      "name": "whole_long",
+      "description": "the tracked beans are predominantly long and uncut"
+    },
+    {
+      "name": "partially_chopped",
+      "description": "both long uncut sections and short cut pieces from the tracked bundle are visible"
+    },
+    {
+      "name": "chopped",
+      "description": "the tracked bundle is predominantly short separate pieces"
+    }
+  ],
+  "transitions": {
+    "whole_long": [
+      "partially_chopped",
+      "chopped"
+    ],
+    "partially_chopped": [
+      "chopped"
+    ],
+    "chopped": []
+  },
+  "video": "../../../ego4d_data/v2/clips/4f05d509-da94-4415-8566-33bdd8220912.mp4"
+}

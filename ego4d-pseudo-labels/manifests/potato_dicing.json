@@ -1,0 +1,32 @@
+{
+  "video_id": "eea0adb3-b69c-4d32-ab77-d42d52e31e79",
+  "start_second": 248,
+  "duration_seconds": 90,
+  "selection_reason": "The same peeled potato batch remains on the counter while visibly changing from large pieces to small dice.",
+  "object": "the peeled yellow potato batch on the cutting surface and every piece cut directly from that batch; ignore the separate bowl of already diced potato",
+  "states": [
+    {
+      "name": "large_pieces",
+      "description": "the tracked batch is predominantly whole potatoes or large chunks"
+    },
+    {
+      "name": "partially_diced",
+      "description": "both large tracked pieces and newly cut small pieces are visible"
+    },
+    {
+      "name": "diced",
+      "description": "the tracked batch is predominantly small separate pieces"
+    }
+  ],
+  "transitions": {
+    "large_pieces": [
+      "partially_diced",
+      "diced"
+    ],
+    "partially_diced": [
+      "diced"
+    ],
+    "diced": []
+  },
+  "video": "../../../ego4d_data/v2/clips/eea0adb3-b69c-4d32-ab77-d42d52e31e79.mp4"
+}

@@ -1,0 +1,32 @@
+{
+  "video_id": "f281dde6-b964-4bc2-90a2-49ca2830e05d",
+  "video": "../../../ego4d_data/v2/clips/f281dde6-b964-4bc2-90a2-49ca2830e05d.mp4",
+  "start_second": 345,
+  "duration_seconds": 14,
+  "selection_reason": "One long green vegetable remains on the white cutting board while it is visibly sliced.",
+  "object": "the single long green vegetable held horizontally on the white cutting board at sample 0 and every piece cut directly from it; ignore all other vegetables",
+  "states": [
+    {
+      "name": "whole_long",
+      "description": "the tracked vegetable remains one long connected piece"
+    },
+    {
+      "name": "partially_sliced",
+      "description": "a connected remainder and detached slices from it are both visible"
+    },
+    {
+      "name": "sliced_pieces",
+      "description": "the tracked vegetable has been fully reduced to detached slices"
+    }
+  ],
+  "transitions": {
+    "whole_long": [
+      "partially_sliced",
+      "sliced_pieces"
+    ],
+    "partially_sliced": [
+      "sliced_pieces"
+    ],
+    "sliced_pieces": []
+  }
+}

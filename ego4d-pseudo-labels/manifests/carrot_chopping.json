@@ -1,0 +1,32 @@
+{
+  "video_id": "6fc3efed-3504-449a-8ea7-0cdc65fbcde7",
+  "start_second": 315,
+  "duration_seconds": 60,
+  "selection_reason": "One carrot segment remains on the white cutting board while it is visibly reduced to smaller pieces.",
+  "object": "the single orange carrot segment first held at the center of the white cutting board and every piece cut directly from that segment",
+  "states": [
+    {
+      "name": "intact_segment",
+      "description": "the tracked carrot segment is still one connected piece"
+    },
+    {
+      "name": "partially_chopped",
+      "description": "a connected remainder and detached descendant pieces are both visible"
+    },
+    {
+      "name": "chopped_pieces",
+      "description": "the tracked carrot segment has been fully reduced to detached pieces"
+    }
+  ],
+  "transitions": {
+    "intact_segment": [
+      "partially_chopped",
+      "chopped_pieces"
+    ],
+    "partially_chopped": [
+      "chopped_pieces"
+    ],
+    "chopped_pieces": []
+  },
+  "video": "../../../ego4d_data/v2/clips/6fc3efed-3504-449a-8ea7-0cdc65fbcde7.mp4"
+}

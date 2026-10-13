@@ -1,0 +1,32 @@
+{
+  "video_id": "a8918018-a4a5-451b-bcff-8e7b636e6702",
+  "video": "../../ego4d_data/v2/clips/a8918018-a4a5-451b-bcff-8e7b636e6702_00m42s-01m42s.mp4",
+  "start_second": 0,
+  "duration_seconds": 30,
+  "selection_reason": "One chapati remains visible while browning on the griddle and over direct flame; the change is externally visible and is not a soup, stew, or mixture.",
+  "object": "the single chapati already on the black griddle at sample 0; follow that exact chapati when it is lifted or moved over the flame, and ignore the pale dough disc at lower left and finished chapatis on the plate",
+  "states": [
+    {
+      "name": "pale",
+      "description": "surface is predominantly pale with no or only faint brown marks"
+    },
+    {
+      "name": "lightly_browned",
+      "description": "clear brown spots are visible, but most of the surface remains pale"
+    },
+    {
+      "name": "deeply_browned",
+      "description": "dark or widespread brown patches are visible across the surface"
+    }
+  ],
+  "transitions": {
+    "pale": [
+      "lightly_browned",
+      "deeply_browned"
+    ],
+    "lightly_browned": [
+      "deeply_browned"
+    ],
+    "deeply_browned": []
+  }
+}
