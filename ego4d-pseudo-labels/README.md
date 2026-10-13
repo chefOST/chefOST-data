@@ -44,6 +44,8 @@ python3 pipeline.py finalize
 
 This writes `output/state_changes.jsonl`, containing only human-approved frame-to-object-state-change pairs. A transition frame means the first 1 FPS sample where the new state is visibly established, not the unknowable exact instant between samples.
 
+Copy final annotation files to [`Ego4D/annotations/pseudo_labels/`](../Ego4D/annotations/pseudo_labels/) and dictionaries/video metadata to [`Ego4D/vocabulary/`](../Ego4D/vocabulary/). Keep frames, caches and review work in ignored `output/`.
+
 ## Checks
 
 ```bash
