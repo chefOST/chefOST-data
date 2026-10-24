@@ -55,6 +55,13 @@ python3 full_video_run.py /path/to/video.avi --output full-run-output/video-name
 
 The default 1 FPS sampling covers the whole video and reports source-frame numbers at one-second precision. Outputs are `transitions.json`, `raw_response.json`, and `run.json` (model, runtime, token usage, and sampling details).
 
+For Claude, use the frontier Opus model. Its 100-image request limit makes the default scan 0.25 FPS (four-second precision):
+
+```bash
+export ANTHROPIC_API_KEY=...
+python3 claude_full_video_run.py /path/to/video.avi --output full-run-output/video-name
+```
+
 ## Checks
 
 ```bash

@@ -1,0 +1,38 @@
+{
+  "model": "claude-opus-5-5",
+  "id": "msg_011CgMWXTcXFxBrffvNRuutp",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+    {
+      "type": "thinking",
+      "thinking": "",
+      "signature": "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"
+    },
+    {
+      "type": "text",
+      "text": "```json\n{\"transitions\":[{\"frame\":1560,\"object\":\"egg\",\"state_before\":\"whole egg in shell\",\"state_after\":\"cracked into bowl\"},{\"frame\":1920,\"object\":\"eggs\",\"state_before\":\"whole raw eggs in bowl\",\"state_after\":\"partly beaten\"},{\"frame\":2040,\"object\":\"eggs\",\"state_before\":\"partly beaten\",\"state_after\":\"beaten\"},{\"frame\":2640,\"object\":\"egg mixture\",\"state_before\":\"beaten eggs\",\"state_after\":\"water added\"},{\"frame\":3240,\"object\":\"vegetable oil\",\"state_before\":\"in bottle\",\"state_after\":\"poured into measuring cup\"},{\"frame\":3480,\"object\":\"egg mixture\",\"state_before\":\"eggs and water\",\"state_after\":\"oil added\"},{\"frame\":5280,\"object\":\"brownie mix\",\"state_before\":\"dry mix in bag\",\"state_after\":\"poured onto wet ingredients in bowl\"},{\"frame\":6120,\"object\":\"brownie batter\",\"state_before\":\"unmixed dry mix and liquids\",\"state_after\":\"partly mixed crumbly\"},{\"frame\":6480,\"object\":\"brownie batter\",\"state_before\":\"partly mixed crumbly\",\"state_after\":\"wet batter forming\"},{\"frame\":7080,\"object\":\"brownie batter\",\"state_before\":\"lumpy wet batter\",\"state_after\":\"mixed smooth batter\"},{\"frame\":7920,\"object\":\"baking pan\",\"state_before\":\"ungreased\",\"state_after\":\"sprayed with cooking spray\"},{\"frame\":8760,\"object\":\"brownie batter\",\"state_before\":\"in bowl\",\"state_after\":\"transferred into pan\"},{\"frame\":9120,\"object\":\"brownie batter\",\"state_before\":\"mounded in pan\",\"state_after\":\"spread in pan\"}]}\n```"
+    }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+    "input_tokens": 61979,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 0
+    },
+    "output_tokens": 859,
+    "output_tokens_details": {
+      "thinking_tokens": 273
+    },
+    "service_tier": "standard",
+    "inference_geo": "global",
+    "speed": "standard"
+  },
+  "diagnostics": null
+}

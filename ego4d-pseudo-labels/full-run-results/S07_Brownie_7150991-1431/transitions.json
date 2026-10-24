@@ -1,0 +1,82 @@
+{
+  "transitions": [
+    {
+      "frame": 1560,
+      "object": "egg",
+      "state_before": "whole egg in shell",
+      "state_after": "cracked into bowl"
+    },
+    {
+      "frame": 1920,
+      "object": "eggs",
+      "state_before": "whole raw eggs in bowl",
+      "state_after": "partly beaten"
+    },
+    {
+      "frame": 2040,
+      "object": "eggs",
+      "state_before": "partly beaten",
+      "state_after": "beaten"
+    },
+    {
+      "frame": 2640,
+      "object": "egg mixture",
+      "state_before": "beaten eggs",
+      "state_after": "water added"
+    },
+    {
+      "frame": 3240,
+      "object": "vegetable oil",
+      "state_before": "in bottle",
+      "state_after": "poured into measuring cup"
+    },
+    {
+      "frame": 3480,
+      "object": "egg mixture",
+      "state_before": "eggs and water",
+      "state_after": "oil added"
+    },
+    {
+      "frame": 5280,
+      "object": "brownie mix",
+      "state_before": "dry mix in bag",
+      "state_after": "poured onto wet ingredients in bowl"
+    },
+    {
+      "frame": 6120,
+      "object": "brownie batter",
+      "state_before": "unmixed dry mix and liquids",
+      "state_after": "partly mixed crumbly"
+    },
+    {
+      "frame": 6480,
+      "object": "brownie batter",
+      "state_before": "partly mixed crumbly",
+      "state_after": "wet batter forming"
+    },
+    {
+      "frame": 7080,
+      "object": "brownie batter",
+      "state_before": "lumpy wet batter",
+      "state_after": "mixed smooth batter"
+    },
+    {
+      "frame": 7920,
+      "object": "baking pan",
+      "state_before": "ungreased",
+      "state_after": "sprayed with cooking spray"
+    },
+    {
+      "frame": 8760,
+      "object": "brownie batter",
+      "state_before": "in bowl",
+      "state_after": "transferred into pan"
+    },
+    {
+      "frame": 9120,
+      "object": "brownie batter",
+      "state_before": "mounded in pan",
+      "state_after": "spread in pan"
+    }
+  ]
+}
