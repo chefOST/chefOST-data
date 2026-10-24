@@ -1,0 +1,46 @@
+{
+  "transitions": [
+    {
+      "frame": 990,
+      "object": "egg",
+      "state_before": "intact shell",
+      "state_after": "cracked shell"
+    },
+    {
+      "frame": 1020,
+      "object": "egg",
+      "state_before": "in shell",
+      "state_after": "released from shell"
+    },
+    {
+      "frame": 1170,
+      "object": "egg",
+      "state_before": "intact yolk and separate white",
+      "state_after": "broken yolk, partly mixed"
+    },
+    {
+      "frame": 1260,
+      "object": "egg",
+      "state_before": "partly mixed",
+      "state_after": "beaten"
+    },
+    {
+      "frame": 5760,
+      "object": "egg",
+      "state_before": "raw liquid",
+      "state_after": "partly set"
+    },
+    {
+      "frame": 8910,
+      "object": "egg",
+      "state_before": "partly set",
+      "state_after": "cooked, set"
+    },
+    {
+      "frame": 10350,
+      "object": "egg",
+      "state_before": "set, yellow surface",
+      "state_after": "golden-brown surface"
+    }
+  ]
+}

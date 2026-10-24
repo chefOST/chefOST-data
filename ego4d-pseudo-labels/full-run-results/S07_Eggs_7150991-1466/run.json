@@ -1,0 +1,20 @@
+{
+  "video": "/Users/raf/Downloads/S07_Eggs_Video/S07_Eggs_7150991-1466.avi",
+  "model": "gpt-6-astra",
+  "source_fps": 30.0,
+  "sample_fps": 1,
+  "sampled_frames": 379,
+  "elapsed_seconds": 24.15,
+  "usage": {
+    "input_tokens": 218835,
+    "input_tokens_details": {
+      "cache_write_tokens": 218832,
+      "cached_tokens": 0
+    },
+    "output_tokens": 459,
+    "output_tokens_details": {
+      "reasoning_tokens": 274
+    },
+    "total_tokens": 219294
+  }
+}
