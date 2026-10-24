@@ -1,0 +1,34 @@
+{
+  "transitions": [
+    {
+      "frame": 2520,
+      "object": "bread slice (first)",
+      "state_before": "plain bread slice with no spread",
+      "state_after": "peanut butter dabbed onto bread slice"
+    },
+    {
+      "frame": 2760,
+      "object": "peanut butter on first bread slice",
+      "state_before": "small dab of peanut butter on bread",
+      "state_after": "peanut butter spread across the slice surface"
+    },
+    {
+      "frame": 3480,
+      "object": "bread slice (second)",
+      "state_before": "plain bread slice with no spread",
+      "state_after": "jelly streaked onto bread slice"
+    },
+    {
+      "frame": 3840,
+      "object": "jelly on second bread slice",
+      "state_before": "jelly in a small streak/blob on bread",
+      "state_after": "jelly spread evenly across the slice surface"
+    },
+    {
+      "frame": 4560,
+      "object": "peanut butter and jelly sandwich",
+      "state_before": "two separate topped slices (peanut butter slice and jelly slice) side by side on plate",
+      "state_after": "slices pressed together into one assembled sandwich"
+    }
+  ]
+}

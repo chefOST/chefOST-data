@@ -59,7 +59,7 @@ For Claude, the default is Fable 5.1. Its 100-image request limit makes the defa
 
 ```bash
 export ANTHROPIC_API_KEY=...
-python3 claude_full_video_run.py /path/to/video.avi --output full-run-output/video-name
+python3 claude_full_video_run.py /path/to/video.avi --recipe brownie --output full-run-output/video-name
 ```
 
 ## Checks

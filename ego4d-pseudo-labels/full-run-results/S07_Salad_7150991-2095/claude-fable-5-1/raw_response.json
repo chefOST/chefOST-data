@@ -1,0 +1,38 @@
+{
+  "model": "claude-fable-5-1",
+  "id": "msg_011CgMcmaiFpTDdQti76Eqay",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+    {
+      "type": "thinking",
+      "thinking": "",
+      "signature": "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"
+    },
+    {
+      "type": "text",
+      "text": "{\"transitions\":[{\"frame\":2640,\"object\":\"lettuce\",\"state_before\":\"whole leaves in bag\",\"state_after\":\"torn into pieces in hand\"},{\"frame\":2760,\"object\":\"lettuce\",\"state_before\":\"torn pieces held loose\",\"state_after\":\"placed in bowl as salad base\"},{\"frame\":3360,\"object\":\"carrot\",\"state_before\":\"unpeeled whole carrot\",\"state_after\":\"partially peeled, peel strips in sink\"},{\"frame\":3480,\"object\":\"carrot\",\"state_before\":\"partially peeled\",\"state_after\":\"fully peeled whole carrot\"},{\"frame\":4080,\"object\":\"carrot\",\"state_before\":\"whole peeled carrot\",\"state_after\":\"sliced into rounds, combined with lettuce in bowl\"},{\"frame\":4800,\"object\":\"cucumber\",\"state_before\":\"unpeeled whole cucumber\",\"state_after\":\"partially peeled\"},{\"frame\":4920,\"object\":\"cucumber\",\"state_before\":\"peeled whole cucumber with ends intact\",\"state_after\":\"end cut off, peeled cucumber\"},{\"frame\":5400,\"object\":\"cucumber\",\"state_before\":\"whole peeled cucumber\",\"state_after\":\"sliced into rounds, added to salad in bowl\"},{\"frame\":6600,\"object\":\"celery\",\"state_before\":\"whole stalk\",\"state_after\":\"cut into pieces, added to salad in bowl\"},{\"frame\":7440,\"object\":\"croutons\",\"state_before\":\"separate in bag\",\"state_after\":\"combined with vegetables in salad bowl\"},{\"frame\":7920,\"object\":\"dressing\",\"state_before\":\"salad undressed\",\"state_after\":\"dressing poured over assembled salad\"}]}"
+    }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+    "input_tokens": 52871,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 0
+    },
+    "output_tokens": 1494,
+    "output_tokens_details": {
+      "thinking_tokens": 939
+    },
+    "service_tier": "standard",
+    "inference_geo": "global",
+    "speed": "standard"
+  },
+  "diagnostics": null
+}

@@ -55,10 +55,10 @@ def run(args):
     if len(frames) > 100:
         raise RuntimeError(f"Anthropic accepts at most 100 images; got {len(frames)}. Lower --sample-fps.")
 
-    content = [{"type": "text", "text": """Watch these frames from one complete brownie-making video in chronological order. Identify every visible physical state transition of food or ingredients, such as an egg being cracked, separate ingredients being combined, dry ingredients becoming wet batter, batter becoming mixed/smooth, or batter being transferred into a pan. Return the first supplied source frame where each new state is visibly established. Ignore people, cabinets, appliances, and objects merely moving. Do not infer baking or other changes that are not visibly shown.
+    content = [{"type": "text", "text": f"""Watch these frames from one complete {args.recipe}-making video in chronological order. Identify every visible physical state transition of food or ingredients, such as whole to cut, separate ingredients to combined, unmixed to mixed, unpeeled to peeled, or loose ingredients to assembled food. Return the first supplied source frame where each new state is visibly established. Ignore people, cabinets, appliances, packaging, and objects merely moving. Do not infer cooking or other changes that are not visibly shown.
 
 Return only JSON in exactly this shape:
-{"transitions":[{"frame":123,"object":"brownie batter","state_before":"unmixed ingredients","state_after":"partly mixed"}]}"""}]
+{{"transitions":[{{"frame":123,"object":"food or ingredient","state_before":"previous visible state","state_after":"new visible state"}}]}}"""}]
     for index, frame in enumerate(frames):
         source_frame = round(index * source_fps / args.sample_fps)
         content.append({"type": "text", "text": f"Source frame {source_frame}:"})
@@ -95,6 +95,7 @@ def main():
     parser.add_argument("video", type=Path)
     parser.add_argument("--output", type=Path, default=Path("full-run-output"))
     parser.add_argument("--model", default=os.environ.get("ANTHROPIC_VLM_MODEL", "claude-fable-5-1"))
+    parser.add_argument("--recipe", required=True)
     parser.add_argument("--sample-fps", type=float, default=0.25)
     parser.add_argument("--ffmpeg")
     run(parser.parse_args())

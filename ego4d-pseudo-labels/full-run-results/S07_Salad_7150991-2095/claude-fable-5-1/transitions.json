@@ -1,0 +1,70 @@
+{
+  "transitions": [
+    {
+      "frame": 2640,
+      "object": "lettuce",
+      "state_before": "whole leaves in bag",
+      "state_after": "torn into pieces in hand"
+    },
+    {
+      "frame": 2760,
+      "object": "lettuce",
+      "state_before": "torn pieces held loose",
+      "state_after": "placed in bowl as salad base"
+    },
+    {
+      "frame": 3360,
+      "object": "carrot",
+      "state_before": "unpeeled whole carrot",
+      "state_after": "partially peeled, peel strips in sink"
+    },
+    {
+      "frame": 3480,
+      "object": "carrot",
+      "state_before": "partially peeled",
+      "state_after": "fully peeled whole carrot"
+    },
+    {
+      "frame": 4080,
+      "object": "carrot",
+      "state_before": "whole peeled carrot",
+      "state_after": "sliced into rounds, combined with lettuce in bowl"
+    },
+    {
+      "frame": 4800,
+      "object": "cucumber",
+      "state_before": "unpeeled whole cucumber",
+      "state_after": "partially peeled"
+    },
+    {
+      "frame": 4920,
+      "object": "cucumber",
+      "state_before": "peeled whole cucumber with ends intact",
+      "state_after": "end cut off, peeled cucumber"
+    },
+    {
+      "frame": 5400,
+      "object": "cucumber",
+      "state_before": "whole peeled cucumber",
+      "state_after": "sliced into rounds, added to salad in bowl"
+    },
+    {
+      "frame": 6600,
+      "object": "celery",
+      "state_before": "whole stalk",
+      "state_after": "cut into pieces, added to salad in bowl"
+    },
+    {
+      "frame": 7440,
+      "object": "croutons",
+      "state_before": "separate in bag",
+      "state_after": "combined with vegetables in salad bowl"
+    },
+    {
+      "frame": 7920,
+      "object": "dressing",
+      "state_before": "salad undressed",
+      "state_after": "dressing poured over assembled salad"
+    }
+  ]
+}

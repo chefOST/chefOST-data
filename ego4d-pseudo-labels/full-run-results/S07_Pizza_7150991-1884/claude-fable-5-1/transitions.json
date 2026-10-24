@@ -1,0 +1,46 @@
+{
+  "transitions": [
+    {
+      "frame": 2280,
+      "object": "pizza dough",
+      "state_before": "rolled compact log",
+      "state_after": "unrolled flat sheet on tray"
+    },
+    {
+      "frame": 2880,
+      "object": "pizza sauce",
+      "state_before": "in jar, separate from dough",
+      "state_after": "dollops placed on dough"
+    },
+    {
+      "frame": 3120,
+      "object": "pizza sauce",
+      "state_before": "dollops/streaks on dough",
+      "state_after": "spread in a layer across dough"
+    },
+    {
+      "frame": 4080,
+      "object": "cheese",
+      "state_before": "solid block",
+      "state_after": "grated shreds scattered on sauced dough"
+    },
+    {
+      "frame": 4800,
+      "object": "pepperoni",
+      "state_before": "whole stick",
+      "state_after": "cut into round slices"
+    },
+    {
+      "frame": 4920,
+      "object": "pepperoni slices",
+      "state_before": "separate from pizza",
+      "state_after": "placed on cheese-topped dough"
+    },
+    {
+      "frame": 6000,
+      "object": "pizza",
+      "state_before": "partially topped",
+      "state_after": "fully assembled with pepperoni distributed across surface"
+    }
+  ]
+}

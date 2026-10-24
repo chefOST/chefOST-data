@@ -1,0 +1,38 @@
+{
+  "model": "claude-fable-5-1",
+  "id": "msg_011CgMcmZ23r2nuSbQJzd77a",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+    {
+      "type": "thinking",
+      "thinking": "",
+      "signature": "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"
+    },
+    {
+      "type": "text",
+      "text": "{\"transitions\":[{\"frame\":2280,\"object\":\"pizza dough\",\"state_before\":\"rolled compact log\",\"state_after\":\"unrolled flat sheet on tray\"},{\"frame\":2880,\"object\":\"pizza sauce\",\"state_before\":\"in jar, separate from dough\",\"state_after\":\"dollops placed on dough\"},{\"frame\":3120,\"object\":\"pizza sauce\",\"state_before\":\"dollops/streaks on dough\",\"state_after\":\"spread in a layer across dough\"},{\"frame\":4080,\"object\":\"cheese\",\"state_before\":\"solid block\",\"state_after\":\"grated shreds scattered on sauced dough\"},{\"frame\":4800,\"object\":\"pepperoni\",\"state_before\":\"whole stick\",\"state_after\":\"cut into round slices\"},{\"frame\":4920,\"object\":\"pepperoni slices\",\"state_before\":\"separate from pizza\",\"state_after\":\"placed on cheese-topped dough\"},{\"frame\":6000,\"object\":\"pizza\",\"state_before\":\"partially topped\",\"state_after\":\"fully assembled with pepperoni distributed across surface\"}]}"
+    }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+    "input_tokens": 39872,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 0
+    },
+    "output_tokens": 1093,
+    "output_tokens_details": {
+      "thinking_tokens": 746
+    },
+    "service_tier": "standard",
+    "inference_geo": "global",
+    "speed": "standard"
+  },
+  "diagnostics": null
+}

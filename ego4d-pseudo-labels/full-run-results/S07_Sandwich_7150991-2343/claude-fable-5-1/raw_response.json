@@ -1,0 +1,38 @@
+{
+  "model": "claude-fable-5-1",
+  "id": "msg_011CgMcmYdVYu87BvBKVn45D",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+    {
+      "type": "thinking",
+      "thinking": "",
+      "signature": "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"
+    },
+    {
+      "type": "text",
+      "text": "{\"transitions\":[{\"frame\":2520,\"object\":\"bread slice (first)\",\"state_before\":\"plain bread slice with no spread\",\"state_after\":\"peanut butter dabbed onto bread slice\"},{\"frame\":2760,\"object\":\"peanut butter on first bread slice\",\"state_before\":\"small dab of peanut butter on bread\",\"state_after\":\"peanut butter spread across the slice surface\"},{\"frame\":3480,\"object\":\"bread slice (second)\",\"state_before\":\"plain bread slice with no spread\",\"state_after\":\"jelly streaked onto bread slice\"},{\"frame\":3840,\"object\":\"jelly on second bread slice\",\"state_before\":\"jelly in a small streak/blob on bread\",\"state_after\":\"jelly spread evenly across the slice surface\"},{\"frame\":4560,\"object\":\"peanut butter and jelly sandwich\",\"state_before\":\"two separate topped slices (peanut butter slice and jelly slice) side by side on plate\",\"state_after\":\"slices pressed together into one assembled sandwich\"}]}"
+    }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+    "input_tokens": 32073,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 0
+    },
+    "output_tokens": 881,
+    "output_tokens_details": {
+      "thinking_tokens": 550
+    },
+    "service_tier": "standard",
+    "inference_geo": "global",
+    "speed": "standard"
+  },
+  "diagnostics": null
+}

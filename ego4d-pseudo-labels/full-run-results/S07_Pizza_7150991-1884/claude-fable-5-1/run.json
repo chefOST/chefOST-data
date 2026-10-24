@@ -1,0 +1,24 @@
+{
+  "video": "/Users/raf/Downloads/S07_Pizza_Video/S07_Pizza_7150991-1884.avi",
+  "model": "claude-fable-5-1",
+  "source_fps": 30.0,
+  "sample_fps": 0.25,
+  "sampled_frames": 61,
+  "elapsed_seconds": 19.61,
+  "usage": {
+    "input_tokens": 39872,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 0
+    },
+    "output_tokens": 1093,
+    "output_tokens_details": {
+      "thinking_tokens": 746
+    },
+    "service_tier": "standard",
+    "inference_geo": "global",
+    "speed": "standard"
+  }
+}
