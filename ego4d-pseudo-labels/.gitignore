@@ -1,5 +1,6 @@
 __pycache__/
 *.pyc
 output/
+full-run-output/
 team-share/
 .DS_Store

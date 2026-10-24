@@ -1,0 +1,20 @@
+{
+  "video": "/Users/raf/Downloads/S07_Brownie_Video/S07_Brownie_6510211-1103.avi",
+  "model": "gpt-5.2",
+  "source_fps": 30.0,
+  "sample_fps": 1,
+  "sampled_frames": 358,
+  "elapsed_seconds": 9.72,
+  "usage": {
+    "input_tokens": 84999,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 14,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 85013
+  }
+}

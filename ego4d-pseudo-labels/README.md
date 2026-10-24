@@ -44,6 +44,17 @@ python3 pipeline.py finalize
 
 This writes `output/state_changes.jsonl`, containing only human-approved frame-to-object-state-change pairs. A transition frame means the first 1 FPS sample where the new state is visibly established, not the unknowable exact instant between samples.
 
+## Full-video production run
+
+Run a complete video through one production model and save frame-based state transitions plus the untouched API response:
+
+```bash
+export OPENAI_API_KEY=...
+python3 full_video_run.py /path/to/video.avi --output full-run-output/video-name
+```
+
+The default 1 FPS sampling covers the whole video and reports source-frame numbers at one-second precision. Outputs are `transitions.json`, `raw_response.json`, and `run.json` (model, runtime, token usage, and sampling details).
+
 ## Checks
 
 ```bash
