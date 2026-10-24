@@ -37,7 +37,7 @@ def extract_frames(video, output, sample_fps, ffmpeg):
     if not list(frames.glob("*.jpg")):
         subprocess.run([
             ffmpeg, "-hide_banner", "-loglevel", "error", "-i", str(video),
-            "-vf", f"fps={sample_fps},scale=512:-2", "-q:v", "4", "-start_number", "0",
+            "-vf", f"fps={sample_fps},scale=640:-2", "-q:v", "3", "-start_number", "0",
             str(frames / "%06d.jpg"),
         ], check=True)
     return sorted(frames.glob("*.jpg"))
@@ -45,7 +45,7 @@ def extract_frames(video, output, sample_fps, ffmpeg):
 
 def image_part(path):
     encoded = base64.b64encode(path.read_bytes()).decode()
-    return {"type": "input_image", "image_url": f"data:image/jpeg;base64,{encoded}", "detail": "low"}
+    return {"type": "input_image", "image_url": f"data:image/jpeg;base64,{encoded}", "detail": "high"}
 
 
 def schema():
@@ -136,7 +136,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("video", type=Path)
     parser.add_argument("--output", type=Path, default=Path("full-run-output"))
-    parser.add_argument("--model", default=os.environ.get("OPENAI_VLM_MODEL", "gpt-5.2"))
+    parser.add_argument("--model", default=os.environ.get("OPENAI_VLM_MODEL", "gpt-6-astra"))
     parser.add_argument("--sample-fps", type=float, default=1)
     parser.add_argument("--ffmpeg")
     args = parser.parse_args()
