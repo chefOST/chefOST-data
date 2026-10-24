@@ -1,0 +1,38 @@
+{
+  "model": "claude-fable-5-1",
+  "id": "msg_011CgMbx89HHxXfhP9Qj3qqU",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+    {
+      "type": "thinking",
+      "thinking": "",
+      "signature": "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"
+    },
+    {
+      "type": "text",
+      "text": "{\"transitions\":[{\"frame\":1560,\"object\":\"egg\",\"state_before\":\"whole egg in shell\",\"state_after\":\"cracked into bowl (yolk and white in bowl)\"},{\"frame\":1920,\"object\":\"eggs\",\"state_before\":\"one egg in bowl\",\"state_after\":\"second egg cracked in, two yolks in bowl\"},{\"frame\":2040,\"object\":\"eggs\",\"state_before\":\"separate yolks and whites\",\"state_after\":\"beaten eggs\"},{\"frame\":2640,\"object\":\"egg mixture\",\"state_before\":\"beaten eggs only\",\"state_after\":\"water being combined with beaten eggs\"},{\"frame\":3240,\"object\":\"oil\",\"state_before\":\"oil in jug\",\"state_after\":\"oil poured into measuring cup\"},{\"frame\":3480,\"object\":\"wet ingredients\",\"state_before\":\"eggs and water\",\"state_after\":\"oil combined with egg-water mixture\"},{\"frame\":4920,\"object\":\"brownie mix bag\",\"state_before\":\"sealed bag\",\"state_after\":\"bag cut open, dry mix exposed\"},{\"frame\":5280,\"object\":\"brownie batter\",\"state_before\":\"wet ingredients and dry mix separate\",\"state_after\":\"dry mix poured onto wet ingredients, unmixed\"},{\"frame\":6120,\"object\":\"brownie batter\",\"state_before\":\"dry mix piled on wet ingredients\",\"state_after\":\"stirred, crumbly partly combined\"},{\"frame\":6480,\"object\":\"brownie batter\",\"state_before\":\"crumbly partly combined\",\"state_after\":\"partly mixed with wet streaks\"},{\"frame\":6960,\"object\":\"brownie batter\",\"state_before\":\"partly mixed\",\"state_after\":\"mostly mixed wet batter\"},{\"frame\":7200,\"object\":\"brownie batter\",\"state_before\":\"mostly mixed\",\"state_after\":\"fully mixed smooth glossy batter\"},{\"frame\":7920,\"object\":\"baking pan\",\"state_before\":\"dry pan\",\"state_after\":\"pan coated with cooking spray\"},{\"frame\":8760,\"object\":\"brownie batter\",\"state_before\":\"batter in bowl\",\"state_after\":\"batter being poured into pan\"},{\"frame\":9120,\"object\":\"brownie batter\",\"state_before\":\"batter partially in pan\",\"state_after\":\"batter spread in pan\"}]}"
+    }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+    "input_tokens": 61979,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 0
+    },
+    "output_tokens": 1539,
+    "output_tokens_details": {
+      "thinking_tokens": 789
+    },
+    "service_tier": "standard",
+    "inference_geo": "global",
+    "speed": "standard"
+  },
+  "diagnostics": null
+}

@@ -94,7 +94,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("video", type=Path)
     parser.add_argument("--output", type=Path, default=Path("full-run-output"))
-    parser.add_argument("--model", default=os.environ.get("ANTHROPIC_VLM_MODEL", "claude-opus-5-5"))
+    parser.add_argument("--model", default=os.environ.get("ANTHROPIC_VLM_MODEL", "claude-fable-5-1"))
     parser.add_argument("--sample-fps", type=float, default=0.25)
     parser.add_argument("--ffmpeg")
     run(parser.parse_args())

@@ -1,0 +1,94 @@
+{
+  "transitions": [
+    {
+      "frame": 1560,
+      "object": "egg",
+      "state_before": "whole egg in shell",
+      "state_after": "cracked into bowl (yolk and white in bowl)"
+    },
+    {
+      "frame": 1920,
+      "object": "eggs",
+      "state_before": "one egg in bowl",
+      "state_after": "second egg cracked in, two yolks in bowl"
+    },
+    {
+      "frame": 2040,
+      "object": "eggs",
+      "state_before": "separate yolks and whites",
+      "state_after": "beaten eggs"
+    },
+    {
+      "frame": 2640,
+      "object": "egg mixture",
+      "state_before": "beaten eggs only",
+      "state_after": "water being combined with beaten eggs"
+    },
+    {
+      "frame": 3240,
+      "object": "oil",
+      "state_before": "oil in jug",
+      "state_after": "oil poured into measuring cup"
+    },
+    {
+      "frame": 3480,
+      "object": "wet ingredients",
+      "state_before": "eggs and water",
+      "state_after": "oil combined with egg-water mixture"
+    },
+    {
+      "frame": 4920,
+      "object": "brownie mix bag",
+      "state_before": "sealed bag",
+      "state_after": "bag cut open, dry mix exposed"
+    },
+    {
+      "frame": 5280,
+      "object": "brownie batter",
+      "state_before": "wet ingredients and dry mix separate",
+      "state_after": "dry mix poured onto wet ingredients, unmixed"
+    },
+    {
+      "frame": 6120,
+      "object": "brownie batter",
+      "state_before": "dry mix piled on wet ingredients",
+      "state_after": "stirred, crumbly partly combined"
+    },
+    {
+      "frame": 6480,
+      "object": "brownie batter",
+      "state_before": "crumbly partly combined",
+      "state_after": "partly mixed with wet streaks"
+    },
+    {
+      "frame": 6960,
+      "object": "brownie batter",
+      "state_before": "partly mixed",
+      "state_after": "mostly mixed wet batter"
+    },
+    {
+      "frame": 7200,
+      "object": "brownie batter",
+      "state_before": "mostly mixed",
+      "state_after": "fully mixed smooth glossy batter"
+    },
+    {
+      "frame": 7920,
+      "object": "baking pan",
+      "state_before": "dry pan",
+      "state_after": "pan coated with cooking spray"
+    },
+    {
+      "frame": 8760,
+      "object": "brownie batter",
+      "state_before": "batter in bowl",
+      "state_after": "batter being poured into pan"
+    },
+    {
+      "frame": 9120,
+      "object": "brownie batter",
+      "state_before": "batter partially in pan",
+      "state_after": "batter spread in pan"
+    }
+  ]
+}
