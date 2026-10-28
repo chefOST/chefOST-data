@@ -8,9 +8,11 @@
 
 Includes JSON and XLSX files; no videos, extracted features or evaluation code. Multiple states can apply to one object at a time; verify video/frame alignment before scoring.
 
+The curated ground-truth release contains 87 recordings: CMU 29, EGTEA 12 and EgoPER 46. One CMU recording with an unresolved video/annotation length mismatch is excluded from ground truth, pseudo-labels and video metadata in both annotation formats. Historical runs and results are unchanged.
+
 ## Download
 
-About 1.44 GB. Annotations require [Git LFS](https://git-lfs.com/).
+Annotations require [Git LFS](https://git-lfs.com/).
 
 ```bash
 brew install git-lfs # macOS; other platforms: git-lfs.com
