@@ -1,2 +1,6 @@
 MOSCATO/annotations/**/*.json filter=lfs diff=lfs merge=lfs -text
 MOSCATO/annotations/**/*.xlsx filter=lfs diff=lfs merge=lfs -text
+Ego4D/annotations/**/*.json filter=lfs diff=lfs merge=lfs -text
+Ego4D/annotations/**/*.jsonl filter=lfs diff=lfs merge=lfs -text
+Ego4D/annotations/**/*.csv filter=lfs diff=lfs merge=lfs -text
+Ego4D/annotations/**/*.xlsx filter=lfs diff=lfs merge=lfs -text
