@@ -6,7 +6,7 @@
 - `MOSCATO/annotations/pseudo_labels/`: generated training labels.
 - `MOSCATO/vocabulary/`: object, action and state dictionaries, and video metadata.
 
-Annotations use a 10 fps timeline. Multiple states can apply to an object simultaneously. Align video timestamps to that timeline; keep training pseudo-labels separate from evaluation ground truth.
+Multiple states can apply to an object simultaneously. Keep training pseudo-labels separate from evaluation ground truth.
 
 ## Annotations
 
