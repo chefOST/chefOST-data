@@ -20,10 +20,11 @@ chefost-eval = "chefost_eval.__main__:main"
 chefost-prepare-mapping = "chefost_eval.prepare_mapping:main"
 
 [tool.setuptools.packages.find]
-include = ["chefost_eval*"]
+include = ["chefost_eval*", "training_support*"]
 
 [tool.setuptools.package-data]
 chefost_eval = ["ingredients.json"]
+"training_support.vidosc_legacy" = ["LICENSE"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
