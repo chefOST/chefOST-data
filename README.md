@@ -20,6 +20,15 @@ git -C chefOST-data lfs pull
 
 Use this repository's `main` branch for shared annotations and vocabularies.
 
+## Vocabularies
+
+The JSON files in `MOSCATO/vocabulary/` contain canonical object/state IDs and normalization mappings. For example, see the [CMU state dictionary](MOSCATO/vocabulary/CMU/state_dict.json) and [EGTEA state dictionary](MOSCATO/vocabulary/EGTEA/state_dict.json).
+
+- `all2one` maps label variants to a canonical name, such as CMU `whisked` to `beaten`.
+- `one2all` lists the variants grouped under each canonical name.
+
+These are fields in the imported MOSCATO vocabulary, not a separate ChefOST alias dictionary. The [MOSCATO paper, Section 3.2](https://openaccess.thecvf.com/content/ICCV2025/papers/Zameni_MOSCATO_Predicting_Multiple_Object_State_Change_Through_Actions_ICCV_2025_paper.pdf) describes vocabulary construction using GPT-4o summarization, `text-embedding-3-large` embeddings and k-means clustering. The files do not establish who authored or reviewed each individual mapping. Use the [shared evaluation specification](https://github.com/chefOST/.github/blob/main/docs/Evaluation.md) for vocabulary-only and model-assisted scoring rules.
+
 ## Videos
 
 Videos are hosted on R2:
