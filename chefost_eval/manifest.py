@@ -14,7 +14,7 @@ DATASETS = {
 }
 
 
-def load_run(manifest_path):
+def load_run(manifest_path, *, metadata_only=False):
     path = Path(manifest_path).resolve()
     config = read_json(path)
     if config.get("schema_version") != 1 or config.get("method") not in {"mosp", "vidosc", "claude", "tubeletgraph"}:
@@ -34,8 +34,15 @@ def load_run(manifest_path):
         if key in available:
             raise ValueError("Duplicate R2 release video identity")
         available[key] = entry
-    if type(config.get("diagnostic_subset", False)) is not bool:
-        raise ValueError("diagnostic_subset must be an explicit boolean")
+    diagnostic_subset = config.get("diagnostic_subset", False)
+    comparison_subset = config.get("comparison_subset", False)
+    if type(diagnostic_subset) is not bool or type(comparison_subset) is not bool:
+        raise ValueError("diagnostic_subset and comparison_subset must be explicit booleans")
+    if diagnostic_subset and comparison_subset:
+        raise ValueError("A run cannot be both a diagnostic subset and a subset comparison")
+    if comparison_subset and (not isinstance(config.get("subset_reason"), str)
+                              or not config["subset_reason"].strip()):
+        raise ValueError("comparison_subset requires a nonempty subset_reason")
     policy = read_json(Path(__file__).with_name("ingredients.json"))["datasets"]
     vocabularies, object_vocabularies, annotations, hashes, videos = {}, {}, {}, {}, []
     seen = set()
@@ -94,6 +101,8 @@ def load_run(manifest_path):
                     raise ValueError("GT frame states must be lists")
                 if labels:
                     destination[index] = destination[index].union(labels)
+        identified_states = {name for name, rows in state_rows.items() if any(rows)}
+        targets = (set().union(*canonical_presence) | identified_states) & set(policy[dataset]["include"])
         predictions = {}
         specs = record["predictions"]
         if not isinstance(specs, list) or not specs:
@@ -102,13 +111,12 @@ def load_run(manifest_path):
             source = (path.parent / spec["path"]).resolve()
             if sha256(source) != spec.get("sha256"):
                 raise ValueError("Prediction checksum mismatch")
-            loaded = load_predictions(spec, path.parent, config["method"], objects)
+            loaded = load_predictions(spec, path.parent, config["method"], objects,
+                                      target_objects=targets)
             if set(loaded) & set(predictions):
                 raise ValueError("Duplicate prediction streams")
             predictions.update(loaded)
             input_hashes[str(source)] = sha256(source)
-        identified_states = {name for name, rows in state_rows.items() if any(rows)}
-        targets = (set().union(*canonical_presence) | identified_states) & set(policy[dataset]["include"])
         ingredients = {}
         for name in sorted(targets):
             stream = predictions.get("*" if config["method"] == "vidosc" else name)
@@ -128,16 +136,28 @@ def load_run(manifest_path):
                     raise ValueError("Timing requires an explicit visibility mask or declared GT-presence visibility source")
             ingredients[name] = {"gt": states,
                                  "present": present, "visible": visible, **stream}
-        videos.append({"key": dataset + "/" + video_id, "dataset": dataset, "video_id": video_id,
-                       "frames": frames, "fps": fps, "ingredients": ingredients})
+        if metadata_only:
+            # Preflight applies every loader gate but does not retain all videos'
+            # large probability/GT arrays at once. Scoring keeps the full form.
+            videos.append({"key": dataset + "/" + video_id, "dataset": dataset,
+                           "video_id": video_id, "ingredients": {name: {} for name in ingredients}})
+            # Drop expanded prediction/GT structures before loading the next
+            # video, including loop variables retaining the last object stream.
+            predictions = ingredients = state_rows = canonical_presence = None
+            loaded = stream = states = frames = visible_presence = present = visible = None
+        else:
+            videos.append({"key": dataset + "/" + video_id, "dataset": dataset, "video_id": video_id,
+                           "frames": frames, "fps": fps, "ingredients": ingredients})
     if not videos:
         raise ValueError("No videos selected")
     omitted = set(available) - seen
-    if omitted and not config.get("diagnostic_subset", False):
-        raise ValueError("Final evaluation must include all available R2 videos; explicitly mark diagnostic_subset for a partial check")
+    if omitted and not (diagnostic_subset or comparison_subset):
+        raise ValueError("Final evaluation must include all available R2 videos; explicitly mark diagnostic_subset for a partial check or comparison_subset with its reason for a scoped comparison")
     metadata = {"annotation_revision": config["annotation_revision"], "prediction_revision": config["prediction_revision"],
                 "input_sha256": input_hashes, "r2_manifest_sha256": config["r2_manifest_sha256"],
                 "selected_videos": [v["key"] for v in videos],
-                "scope": "diagnostic_subset" if config.get("diagnostic_subset", False) else "full_r2_release",
+                "scope": "diagnostic_subset" if diagnostic_subset else "subset_comparison" if comparison_subset else "full_r2_release",
                 "omitted_available_videos": [dataset + "/" + video for dataset, video in sorted(omitted)]}
+    if comparison_subset:
+        metadata["subset_reason"] = config["subset_reason"].strip()
     return config, videos, vocabularies, hashes, metadata

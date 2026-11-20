@@ -90,13 +90,13 @@ def test_claude_does_not_backfill_state_before(tmp_path):
     assert streams["eggs"]["windows"] == [{"start_frame": 5, "end_frame": 10, "labels": ["cooked"]}]
 
 
-def test_mosp_npz_keeps_all_object_state_scores(tmp_path):
+def test_mosp_npz_preserves_object_columns_for_selectable_states(tmp_path):
     np = pytest.importorskip("numpy")
     np.savez(tmp_path / "p.npz", state_probabilities=[[.7, .3, .2, .8], [.1, .9, .6, .4]])
     streams = load_predictions({"path": "p.npz", "format": "mosp_npz", "state_labels": ["raw", "cooked"],
                                 "object_labels": ["eggs", "bread"], "window_start_frames": [0, 3],
                                 "end_frame": 6}, tmp_path, "mosp", Vocabulary({"o2i": {"eggs": 0, "bread": 1}}, "o"))
-    assert streams["bread"]["windows"][0]["probabilities"] == {"raw": .2, "cooked": .8}
+    assert streams["bread"]["windows"][0]["probabilities"] == {"cooked": .8}
     assert streams["eggs"]["windows"][1]["start_frame"] == 3
 
 
@@ -144,9 +144,54 @@ def test_state_only_gt_ingredient_not_silently_dropped(manifest):
     assert egg["visible"] == [False, False]
 
 
+def test_explicit_comparison_subset_retains_scope_and_omissions(manifest):
+    config = json.loads(manifest.read_text())
+    release_path = manifest.parent / "r2.json"
+    release = json.loads(release_path.read_text())
+    release["entries"].append({"dataset": "CMU", "ground_truth_video_id": "outside_comparison",
+                              "download_status": "downloaded_verified_identity"})
+    config["r2_manifest_sha256"] = write(release_path, release)
+    config["comparison_subset"] = True
+    config["subset_reason"] = "User-approved matched four-video comparison"
+    write(manifest, config)
+    metadata = load_run(manifest)[-1]
+    assert metadata["scope"] == "subset_comparison"
+    assert metadata["subset_reason"] == config["subset_reason"]
+    assert metadata["omitted_available_videos"] == ["CMU/outside_comparison"]
+
+
+@pytest.mark.parametrize("reason", [None, "", "  ", 3])
+def test_comparison_subset_requires_reason(manifest, reason):
+    config = json.loads(manifest.read_text())
+    config.update(comparison_subset=True, subset_reason=reason)
+    write(manifest, config)
+    with pytest.raises(ValueError, match="subset_reason"):
+        load_run(manifest)
+
+
+def test_comparison_subset_cannot_be_labeled_diagnostic(manifest):
+    config = json.loads(manifest.read_text())
+    config.update(comparison_subset=True, subset_reason="Matched comparison", diagnostic_subset=True)
+    write(manifest, config)
+    with pytest.raises(ValueError, match="both a diagnostic"):
+        load_run(manifest)
+
+
 def test_committed_synthetic_manifest_example():
     from pathlib import Path
     config, videos, _, _, metadata = load_run(Path(__file__).parent / "fixtures/minimal/manifest.json")
     assert config["method"] == "vidosc"
     assert len(videos) == 1
     assert metadata["scope"] == "full_r2_release"
+
+
+def test_metadata_only_loader_keeps_gates_without_retaining_prediction_arrays(manifest):
+    config, videos, _, _, metadata = load_run(manifest, metadata_only=True)
+    assert config["method"] == "vidosc"
+    assert videos[0]["ingredients"] == {"eggs": {}}
+    assert "frames" not in videos[0]
+    assert metadata["scope"] == "full_r2_release"
+    config["videos"][0]["alignment_verified"] = False
+    write(manifest, config)
+    with pytest.raises(ValueError, match="verified annotation"):
+        load_run(manifest, metadata_only=True)

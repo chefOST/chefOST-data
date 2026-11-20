@@ -13,6 +13,7 @@ dependencies = []
 arrays = ["numpy>=1.24"]
 mapping = ["openai>=2"]
 embeddings = ["sentence-transformers>=2.7", "transformers>=4.51"]
+cloud = ["modal>=1.6.1"]
 test = ["pytest>=8"]
 
 [project.scripts]
