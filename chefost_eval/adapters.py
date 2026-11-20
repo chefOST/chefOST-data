@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 
 from .labels import normalized, read_json
+from .scoring import THRESHOLDS
 
 
 def validate_stream(stream, *, probabilities):
@@ -35,7 +36,11 @@ def validate_stream(stream, *, probabilities):
     return stream
 
 
-def load_predictions(spec, base, method, object_vocabulary):
+def load_predictions(spec, base, method, object_vocabulary, *, target_objects=None):
+    if target_objects is not None:
+        target_objects = set(target_objects)
+        if not target_objects <= object_vocabulary.names:
+            raise ValueError("Prediction targets must be canonical vocabulary objects")
     path = base / spec["path"]
     kind = spec.get("format", "windows")
     if kind == "windows":
@@ -50,18 +55,45 @@ def load_predictions(spec, base, method, object_vocabulary):
         starts, end = spec["window_start_frames"], spec["end_frame"]
         if not labels or len(labels) != len(set(labels)) or not starts:
             raise ValueError("NPZ adapter requires unique state labels and explicit source-frame window starts")
+        for label in labels:
+            normalized(label)
         objects = spec["object_labels"] if method == "mosp" else ["*"]
+        if not objects or len(objects) != len(set(objects)):
+            raise ValueError("NPZ adapter requires unique native object labels")
+        if method == "mosp":
+            canonical_objects = [object_vocabulary.canonical(obj) for obj in objects]
+            if None in canonical_objects or len(set(canonical_objects)) != len(canonical_objects):
+                raise ValueError("Unknown or duplicate canonical prediction object")
         if values.shape != (len(starts), len(objects) * len(labels)):
             raise ValueError("Saved probability shape differs from declared vocabulary/timeline")
+        if values.dtype.kind not in "fiu":
+            raise ValueError("Native state probabilities must be real numeric values")
+        # Validate even candidates that cannot pass the fixed threshold grid.
+        # Chunking avoids allocating another full dense validity matrix.
+        for offset in range(0, len(values), 4096):
+            block = values[offset:offset + 4096]
+            if not np.isfinite(block).all() or np.any(block < 0) or np.any(block > 1):
+                raise ValueError("Native state probabilities must be finite numbers in [0,1]")
         if method == "vidosc" and not np.allclose(values.sum(axis=1), 1, atol=1e-5):
             raise ValueError("VidOSC adapter requires native softmax probabilities before vocabulary projection")
         streams = {}
         ends = [*starts[1:], end]
+        minimum_threshold = min(THRESHOLDS)
         for index, obj in enumerate(objects):
-            streams[obj] = {"available_from_frame": starts[0], "windows": [
-                {"start_frame": start, "end_frame": stop, "probabilities": dict(zip(labels,
-                    [float(x) for x in values[t, index * len(labels):(index + 1) * len(labels)]]))}
-                for t, (start, stop) in enumerate(zip(starts, ends))]}
+            if method == "mosp" and target_objects is not None and canonical_objects[index] not in target_objects:
+                continue
+            windows = []
+            for t, (start, stop) in enumerate(zip(starts, ends)):
+                scores = values[t, index * len(labels):(index + 1) * len(labels)]
+                # Preserve every candidate selectable by any declared threshold,
+                # without expanding billions of never-selected values to Python
+                # objects. The hashed source NPZ remains complete and unchanged.
+                candidates = np.flatnonzero(scores >= minimum_threshold)
+                windows.append({"start_frame": start, "end_frame": stop,
+                                "probabilities": {labels[j]: float(scores[j]) for j in candidates}})
+            streams[obj] = {"available_from_frame": starts[0], "windows": windows,
+                            "diagnostics": {"native_state_count": len(labels),
+                                            "candidate_storage_minimum_threshold": minimum_threshold}}
         payload = {"broadcast": streams["*"]} if method == "vidosc" else {"objects": streams}
     elif kind == "claude_transitions":
         if method != "claude":
@@ -109,9 +141,13 @@ def load_predictions(spec, base, method, object_vocabulary):
     if set(payload) != {"objects"} or not isinstance(payload["objects"], dict):
         raise ValueError("Predictions require object-keyed streams")
     result = {}
+    seen = set()
     for obj, stream in payload["objects"].items():
         canonical = object_vocabulary.canonical(obj)
-        if canonical is None or canonical in result:
+        if canonical is None or canonical in seen:
             raise ValueError("Unknown or duplicate canonical prediction object")
-        result[canonical] = validate_stream(stream, probabilities=method == "mosp")
+        seen.add(canonical)
+        validated = validate_stream(stream, probabilities=method == "mosp")
+        if target_objects is None or canonical in target_objects:
+            result[canonical] = validated
     return result
