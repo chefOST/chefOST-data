@@ -14,6 +14,8 @@ This repository is the sole home for ChefOST benchmark scoring, prediction adapt
 
 Run `python -m chefost_eval manifest.json --output scores.json` on saved predictions. The [manifest loader](chefost_eval/manifest.py) validates the video selection, ingredient scope, source-frame alignment and input hashes; a [small synthetic manifest](tests/fixtures/minimal/manifest.json) demonstrates the format. Use `--help` for GPT mapping-cache and Qwen embedding options. [Tests](tests/) exercise the metric and adapter behavior without launching model runs. Publish scores and their provenance to the model's W&B evaluation project.
 
+[Training support](training_support/) preserves validation-dependent model training and checkpoint selection separately from ChefOST benchmark metrics. Its VidOSC workflows use the model checkout selected by `CHEFOST_VIDOSC_SOURCE`; scoring implementations remain here.
+
 ## Annotations
 
 Install [Git LFS](https://git-lfs.com/), then clone this repository and download its LFS objects:
