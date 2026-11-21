@@ -16,7 +16,7 @@ Run `python -m chefost_eval manifest.json --output scores.json` on saved predict
 
 Use `python -m chefost_eval.preflight manifest.json --output preflight.json` to validate inputs without scoring or loading models. Explicit comparison subsets require `comparison_subset: true` and a `subset_reason`; omitted videos remain visible in provenance. The separate [runtime probe](chefost_eval/preflight_runtime.py) checks GPT access and Qwen embeddings using synthetic text only.
 
-[Staging](chefost_eval/staging.py) freezes portable input bundles; the [cloud launcher](chefost_eval/cloud_run.py) runs detached campaigns with shared GPT mappings, batched Qwen embeddings and at most three GPU workers. Campaign and result artifacts are logged to `chefOST/full-run-evals`.
+[Staging](chefost_eval/staging.py) freezes portable input bundles; the [cloud launcher](chefost_eval/cloud_run.py) runs detached campaigns with shared GPT mappings, batched Qwen embeddings and up to eight GPU workers. Campaign and result artifacts are logged to `chefOST/full-run-evals`.
 
 [Training support](training_support/) preserves validation-dependent model training and checkpoint selection separately from ChefOST benchmark metrics. Its VidOSC workflows use the model checkout selected by `CHEFOST_VIDOSC_SOURCE`; scoring implementations remain here.
 

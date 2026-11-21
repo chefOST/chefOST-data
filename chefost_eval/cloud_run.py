@@ -22,11 +22,11 @@ wandb_secret = modal.Secret.from_name("wandb", required_keys=["WANDB_API_KEY"])
 openai_secret = modal.Secret.from_name("tubelet-openai", required_keys=["OPENAI_API_KEY"])
 cpu_image = (modal.Image.debian_slim(python_version="3.11")
     .pip_install("openai==3.57.0", "numpy==2.4.6", "wandb==0.30.0")
-    .add_local_python_source("chefost_eval"))
+    .add_local_python_source("chefost_eval", ignore=[]))
 gpu_image = (modal.Image.debian_slim(python_version="3.11")
     .pip_install("torch==2.15.0", "sentence-transformers==6.3.0", "transformers==5.23.0", "wandb==0.30.0")
     .env({"HF_HOME": "/cache/huggingface"})
-    .add_local_python_source("chefost_eval"))
+    .add_local_python_source("chefost_eval", ignore=[]))
 QWEN_REVISION = "1d8ad4ca9b3dd8059ad90a75d4983776a23d44af"
 
 
@@ -52,7 +52,7 @@ def _code_hashes():
 
 
 @app.function(image=gpu_image, gpu="L40S", cpu=4, memory=65536, timeout=21600,
-              volumes={"/cache": volume}, secrets=[wandb_secret], max_containers=3,
+              volumes={"/cache": volume}, secrets=[wandb_secret], max_containers=8,
               scaledown_window=5, retries=0)
 def score_job(campaign_id: str, job: dict, evaluator_revision: str):
     import wandb
@@ -232,10 +232,38 @@ def run_campaign(campaign_id: str, evaluator_revision: str):
         artifact = run.log_artifact(mapping_artifact)
         artifact.wait(timeout=300)
         run.summary["mapping/artifact"] = artifact.qualified_name
+        canary = next((job for job in campaign["jobs"]
+                       if job["method"] == "tubeletgraph" and job["variant"] == "gpt-4.1"
+                       and job["scope"] == "subset_comparison"), None)
+        if canary is None:
+            raise ValueError("Campaign requires the TubeletGraph GPT-4.1 subset canary")
+        state["phase"] = "canary"
+        state["canary_job"] = canary["id"]
+        run.summary["phase"] = "canary"
+        run.summary["canary/job_id"] = canary["id"]
+        canary_call = score_job.spawn(campaign_id, canary, evaluator_revision)
+        state["jobs"][canary["id"]] = {"status": "submitted", "function_call_id": canary_call.object_id,
+            "wandb_run_id": run_id(campaign_id, canary["id"])}
+        write_json(state_path, state)
+        volume.commit()
+        try:
+            canary_result = canary_call.get()
+            state["jobs"][canary["id"]].update(canary_result)
+            if canary_result.get("status") != "complete":
+                raise RuntimeError("Canary did not complete; remaining jobs were not dispatched")
+        except Exception as exc:
+            state["jobs"][canary["id"]].update(status="failed", error_type=type(exc).__name__)
+            run.summary["canary/status"] = "failed"
+            raise
+        run.summary["canary/status"] = "complete"
         state["phase"] = "scoring"
         run.summary["phase"] = "scoring"
+        write_json(state_path, state)
+        volume.commit()
         calls = []
         for job in campaign["jobs"]:
+            if job["id"] == canary["id"]:
+                continue
             call = score_job.spawn(campaign_id, job, evaluator_revision)
             state["jobs"][job["id"]] = {"status": "submitted", "function_call_id": call.object_id,
                 "wandb_run_id": run_id(campaign_id, job["id"])}
@@ -243,7 +271,7 @@ def run_campaign(campaign_id: str, evaluator_revision: str):
         write_json(state_path, state)
         volume.commit()
         errors = []
-        with ThreadPoolExecutor(max_workers=len(calls)) as pool:
+        with ThreadPoolExecutor(max_workers=max(1, len(calls))) as pool:
             pending = {pool.submit(call.get): job_id for job_id, call in calls}
             for future in as_completed(pending):
                 job_id = pending[future]
