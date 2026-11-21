@@ -3,6 +3,32 @@ from pathlib import Path
 
 import pytest
 
+from chefost_eval.staging import validate_bundle_files, file_hash
+
+
+def test_bundle_validation_accepts_symlinked_volume_root(tmp_path):
+    actual = tmp_path / "actual"
+    actual.mkdir()
+    source = actual / "source.json"
+    source.write_text('{"value": 1}')
+    mount = tmp_path / "cache"
+    mount.symlink_to(actual, target_is_directory=True)
+    validate_bundle_files(mount, {"source.json": {"bytes": source.stat().st_size,
+                                                 "sha256": file_hash(source)}})
+
+
+def test_bundle_validation_rejects_escape_and_bad_content(tmp_path):
+    root = tmp_path / "inputs"
+    root.mkdir()
+    outside = tmp_path / "outside.json"
+    outside.write_text('{}')
+    with pytest.raises(ValueError, match="escapes"):
+        validate_bundle_files(root, {"../outside.json": {"bytes": 2, "sha256": file_hash(outside)}})
+    inside = root / "inside.json"
+    inside.write_text('{}')
+    with pytest.raises(ValueError, match="checksum"):
+        validate_bundle_files(root, {"inside.json": {"bytes": 2, "sha256": "0" * 64}})
+
 from chefost_eval.manifest import load_run
 from chefost_eval.staging import file_hash, stage_manifests
 

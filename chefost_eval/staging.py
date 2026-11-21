@@ -25,6 +25,19 @@ def read_json(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
+def validate_bundle_files(root, files):
+    """Check frozen bytes under a resolved root, including symlinked mounts."""
+    root = Path(root).resolve()
+    for relative, expected in files.items():
+        path = (root / relative).resolve()
+        if not path.is_relative_to(root):
+            raise ValueError(f"Staged input escapes its root: {relative}")
+        if path.stat().st_size != expected["bytes"]:
+            raise ValueError(f"Staged input size mismatch: {relative}")
+        if file_hash(path) != expected["sha256"]:
+            raise ValueError(f"Staged input checksum mismatch: {relative}")
+
+
 def _source(base, value):
     path = Path(value)
     return (path if path.is_absolute() else base / path).resolve()
