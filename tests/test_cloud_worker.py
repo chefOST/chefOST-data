@@ -4,6 +4,7 @@ import importlib.util
 import json
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 from types import SimpleNamespace
 
@@ -15,12 +16,27 @@ from chefost_eval.staging import stage_manifests
 
 
 class Image:
+    def __init__(self):
+        self.source_files = {}
+
     @classmethod
     def debian_slim(cls, **kwargs):
         return cls()
 
     def __getattr__(self, name):
         return lambda *args, **kwargs: self
+
+    def add_local_python_source(self, *modules, ignore=None):
+        # Modal's documented default only includes Python files. Explicit
+        # ignore=[] includes package resources while excluding Python caches.
+        for module in modules:
+            package = Path(importlib.util.find_spec(module).origin).parent
+            for path in package.rglob("*"):
+                relative = path.relative_to(package)
+                if (path.is_file() and "__pycache__" not in relative.parts
+                        and (ignore == [] or path.suffix == ".py")):
+                    self.source_files[Path(module.replace(".", "/")) / relative] = path
+        return self
 
 
 class App:
@@ -142,3 +158,72 @@ def test_copied_complete_mapping_cache_needs_zero_new_requests(tmp_path):
     client = SimpleNamespace(responses=SimpleNamespace(
         create=lambda **kwargs: pytest.fail("Complete copied cache made a paid request")))
     assert prepare(request, output, client=client) == cache
+
+
+def test_cpu_and_gpu_packages_load_ingredient_policy_in_isolation(worker, tmp_path):
+    module, _, _ = worker
+    fixture = Path(__file__).parent / "fixtures/minimal/manifest.json"
+    for name in ("cpu_image", "gpu_image"):
+        target = tmp_path / name
+        for relative, source in getattr(module, name).source_files.items():
+            dest = target / relative
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, dest)
+        result = subprocess.run([sys.executable, "-I", "-c",
+            "import sys; sys.path.insert(0, sys.argv[1]); "
+            "from chefost_eval.manifest import load_run; "
+            "data=load_run(sys.argv[2], metadata_only=True); "
+            "assert len(data[1]) == 1", str(target), str(fixture.resolve())],
+            text=True, capture_output=True)
+        assert result.returncode == 0, result.stderr
+
+
+@pytest.mark.parametrize("canary_fails", [False, True])
+def test_coordinator_waits_for_successful_canary_before_other_jobs(worker, monkeypatch, canary_fails):
+    module, root, job = worker
+    campaign_path = root / "inputs/campaign.json"
+    campaign = json.loads(campaign_path.read_text())
+    canary = {**job, "id": "tubeletgraph-gpt41-matched4", "method": "tubeletgraph",
+              "variant": "gpt-4.1", "scope": "subset_comparison"}
+    campaign["jobs"] = [job, canary, {**job, "id": "other"}]
+    campaign_path.write_text(json.dumps(campaign))
+    mapping_spec = json.loads((root / "inputs/mapping-input.json").read_text())
+    mapping = {"model": MODEL, "prompt_sha256": PROMPT_SHA, "generation_settings": SETTINGS,
+        "vocabulary_sha256": {"CMU": sha256(root / "inputs" / mapping_spec["vocabularies"]["CMU"])},
+        "entries": {"CMU": {label: {"states": [label], "unmatched": False}
+                              for label in mapping_spec["labels"]["CMU"]}}, "responses": []}
+    (root / "mapping").mkdir()
+    (root / "mapping/assisted-mapping.json").write_text(json.dumps(mapping))
+    monkeypatch.setitem(sys.modules, "openai", SimpleNamespace(OpenAI=lambda **kw:
+        SimpleNamespace(responses=SimpleNamespace(create=lambda **kw: pytest.fail("Paid API call")))))
+    run = SimpleNamespace(url="https://example.test/coordinator", summary={},
+        log=lambda value: None, finish=lambda **kw: None,
+        log_artifact=lambda value: SimpleNamespace(qualified_name="mapping:v0", wait=lambda **kw: None))
+    monkeypatch.setitem(sys.modules, "wandb", SimpleNamespace(init=lambda **kw: run,
+        Settings=lambda **kw: kw, Artifact=lambda *a, **kw: SimpleNamespace(add_file=lambda *a, **kw: None)))
+    events = []
+
+    def spawn(campaign_id, selected, revision):
+        identity = selected["id"]
+        events.append(("spawn", identity))
+        if identity != canary["id"]:
+            assert ("complete", canary["id"]) in events
+
+        def get():
+            if identity == canary["id"] and canary_fails:
+                raise FileNotFoundError("Missing package resource")
+            events.append(("complete", identity))
+            return {"status": "complete"}
+
+        return SimpleNamespace(object_id="call-" + identity, get=get)
+
+    monkeypatch.setattr(module, "score_job", SimpleNamespace(spawn=spawn))
+    if canary_fails:
+        with pytest.raises(FileNotFoundError):
+            module.run_campaign("test", "revision")
+        assert events == [("spawn", canary["id"])]
+    else:
+        result = module.run_campaign("test", "revision")
+        assert result["status"] == "complete"
+        assert events[:2] == [("spawn", canary["id"]), ("complete", canary["id"])]
+    assert run.summary["mapping/new_batches_completed"] == 0
