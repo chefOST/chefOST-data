@@ -163,6 +163,7 @@ def run_campaign(campaign_id: str, evaluator_revision: str):
     from openai import OpenAI
     from chefost_eval.labels import read_json, sha256
     from chefost_eval.prepare_mapping import prepare, PROMPT_SHA
+    from chefost_eval.staging import validate_bundle_files
     from chefost_eval.wandb_logging import ENTITY, PROJECT, PROTOCOL, run_id, write_json
 
     volume.reload()
@@ -187,12 +188,7 @@ def run_campaign(campaign_id: str, evaluator_revision: str):
     volume.commit()
     try:
         run.summary["phase"] = "validating_inputs"
-        for relative, expected in campaign["files"].items():
-            path = (root / "inputs" / relative).resolve()
-            if not path.is_relative_to(root / "inputs") or path.stat().st_size != expected["bytes"]:
-                raise ValueError("Invalid staged input path or size")
-            if sha256(path) != expected["sha256"]:
-                raise ValueError("Staged input checksum mismatch")
+        validate_bundle_files(root / "inputs", campaign["files"])
         mapping_input = root / "inputs" / campaign.get("mapping_input", "mapping-input.json")
         mapping_output = root / "mapping" / "assisted-mapping.json"
         mapping_output.parent.mkdir(parents=True, exist_ok=True)
