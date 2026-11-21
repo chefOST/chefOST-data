@@ -52,7 +52,7 @@ def _code_hashes():
 
 
 @app.function(image=gpu_image, gpu="L40S", cpu=4, memory=65536, timeout=21600,
-              volumes={"/cache": volume}, secrets=[wandb_secret], max_containers=3,
+              volumes={"/cache": volume}, secrets=[wandb_secret], max_containers=8,
               scaledown_window=5, retries=0)
 def score_job(campaign_id: str, job: dict, evaluator_revision: str):
     import wandb
