@@ -60,6 +60,7 @@ def score_job(campaign_id: str, job: dict, evaluator_revision: str):
     from chefost_eval.labels import AssistedMapping, read_json, sha256
     from chefost_eval.manifest import load_run
     from chefost_eval.scoring import evaluate, THRESHOLDS
+    from chefost_eval.staging import validate_bundle_file
     from chefost_eval.wandb_logging import ENTITY, PROJECT, PROTOCOL, run_id, publish_result, write_json
 
     volume.reload()
@@ -70,11 +71,8 @@ def score_job(campaign_id: str, job: dict, evaluator_revision: str):
     if state_path.exists() and read_json(state_path).get("status") == "complete":
         return read_json(state_path)
     output_dir.mkdir(parents=True, exist_ok=True)
-    manifest = (root / "inputs" / job["manifest"]).resolve()
-    if not manifest.is_relative_to(root / "inputs"):
-        raise ValueError("Manifest must be within the staged input bundle")
-    if sha256(manifest) != job["manifest_sha256"]:
-        raise ValueError("Staged job manifest checksum mismatch")
+    manifest = validate_bundle_file(root / "inputs", job["manifest"],
+                                    {"sha256": job["manifest_sha256"]})
     started = time.monotonic()
     run = wandb.init(entity=ENTITY, project=PROJECT, id=run_id(campaign_id, job["id"]), resume="allow",
         name=job["id"], group=PROTOCOL + "-" + job["scope"], job_type="evaluation",
@@ -196,10 +194,16 @@ def run_campaign(campaign_id: str, evaluator_revision: str):
         write_json(state_path, state)
         volume.commit()
         run.summary["phase"] = "mapping"
-        total_labels = sum(len(labels) for labels in read_json(mapping_input)["labels"].values())
+        mapping_spec = read_json(mapping_input)
+        total_labels = sum(len(labels) for labels in mapping_spec["labels"].values())
+        existing_entries = read_json(mapping_output).get("entries", {}) if mapping_output.exists() else {}
+        pending_counts = {dataset: sum(label not in existing_entries.get(dataset, {}) for label in labels)
+                          for dataset, labels in mapping_spec["labels"].items()}
+        cached_labels = total_labels - sum(pending_counts.values())
         run.summary["mapping/unique_labels"] = total_labels
         run.summary["mapping/total_batches"] = sum((len(labels) + 15) // 16
-            for labels in read_json(mapping_input)["labels"].values())
+            for labels in mapping_spec["labels"].values())
+        run.summary["mapping/new_batches_required"] = sum((count + 15) // 16 for count in pending_counts.values())
         client = OpenAI(timeout=180, max_retries=2)
         original_create = client.responses.create
         completed = [0]
@@ -213,6 +217,11 @@ def run_campaign(campaign_id: str, evaluator_revision: str):
 
         prepare(mapping_input, mapping_output,
                 client=SimpleNamespace(responses=SimpleNamespace(create=tracked_create)))
+        # prepare validates all cache metadata/entries before any reuse succeeds.
+        run.summary["mapping/cached_labels"] = cached_labels
+        run.summary["mapping/new_batches_completed"] = completed[0]
+        run.log({"mapping/cached_labels": cached_labels,
+                 "mapping/new_batches_completed": completed[0]})
         volume.commit()
         mapping_artifact = wandb.Artifact("mapping-" + campaign_id, type="evaluation-mapping",
             metadata={"model": "gpt-6.2-sol", "prompt_sha256": PROMPT_SHA,

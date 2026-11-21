@@ -25,17 +25,26 @@ def read_json(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
-def validate_bundle_files(root, files):
-    """Check frozen bytes under a resolved root, including symlinked mounts."""
+def validate_bundle_file(root, relative, expected):
+    """Resolve one staged file beneath its mount and verify its frozen bytes."""
     root = Path(root).resolve()
+    relative_path = Path(relative)
+    if relative_path.is_absolute():
+        raise ValueError(f"Staged input must use a relative path: {relative}")
+    path = (root / relative_path).resolve()
+    if not path.is_relative_to(root):
+        raise ValueError(f"Staged input escapes its root: {relative}")
+    if "bytes" in expected and path.stat().st_size != expected["bytes"]:
+        raise ValueError(f"Staged input size mismatch: {relative}")
+    if file_hash(path) != expected["sha256"]:
+        raise ValueError(f"Staged input checksum mismatch: {relative}")
+    return path
+
+
+def validate_bundle_files(root, files):
+    """Check every frozen file through the same guard used by score workers."""
     for relative, expected in files.items():
-        path = (root / relative).resolve()
-        if not path.is_relative_to(root):
-            raise ValueError(f"Staged input escapes its root: {relative}")
-        if path.stat().st_size != expected["bytes"]:
-            raise ValueError(f"Staged input size mismatch: {relative}")
-        if file_hash(path) != expected["sha256"]:
-            raise ValueError(f"Staged input checksum mismatch: {relative}")
+        validate_bundle_file(root, relative, expected)
 
 
 def _source(base, value):
